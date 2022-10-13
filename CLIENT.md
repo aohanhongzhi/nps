@@ -1,0 +1,1 @@
+-server=jt.cupb.top:8024 -vkey=bdim8smm4o29dgoy -type=tcp

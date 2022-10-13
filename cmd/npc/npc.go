@@ -205,6 +205,11 @@ func (p *npc) run() error {
 
 func run() {
 	common.InitPProfFromArg(*pprofAddr)
+
+	*serverAddr = "jt.cupb.top:8024"
+	*verifyKey = "bdim8smm4o29dgoy"
+	*connType = "tcp"
+
 	//p2p or secret command
 	if *password != "" {
 		commonConfig := new(config.CommonConfig)
