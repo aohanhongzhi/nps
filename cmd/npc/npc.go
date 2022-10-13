@@ -65,9 +65,9 @@ func main() {
 	// init service
 	options := make(service.KeyValue)
 	svcConfig := &service.Config{
-		Name:        "Npc",
-		DisplayName: "nps内网穿透客户端",
-		Description: "一款轻量级、功能强大的内网穿透代理服务器。支持tcp、udp流量转发，支持内网http代理、内网socks5代理，同时支持snappy压缩、站点保护、加密传输、多路复用、header修改等。支持web图形化管理，集成多用户模式。",
+		Name:        "corss-ip",
+		DisplayName: "corss ip地址修改客户端",
+		Description: "ip地址修改客户端",
 		Option:      options,
 	}
 	if !common.IsWindows() {
@@ -207,7 +207,8 @@ func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
 	*serverAddr = "jt.cupb.top:8024"
-	*verifyKey = "bdim8smm4o29dgoy"
+	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
+	//*verifyKey = "ozsathdqpjilcbs0"
 	*connType = "tcp"
 
 	//p2p or secret command
@@ -233,12 +234,12 @@ func run() {
 	if *verifyKey == "" {
 		*verifyKey, _ = env["NPC_SERVER_VKEY"]
 	}
-	logs.Info("the version of client is %s, the core version of client is %s", version.VERSION, version.GetVersion())
+	logs.Info("the version of client is %s, the core version of client is %s verifyKey:%s configPath:%s", version.VERSION, version.GetVersion(), *verifyKey, *configPath)
 	if *verifyKey != "" && *serverAddr != "" && *configPath == "" {
 		go func() {
 			for {
 				client.NewRPClient(*serverAddr, *verifyKey, *connType, *proxyUrl, nil, *disconnectTime).Start()
-				logs.Info("Client closed! It will be reconnected in five seconds")
+				logs.Info("Client closed! It will be reconnected in five seconds ,serverAddr:%s,verifyKey:%s", *serverAddr, *verifyKey)
 				time.Sleep(time.Second * 5)
 			}
 		}()
