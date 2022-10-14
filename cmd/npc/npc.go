@@ -206,9 +206,15 @@ func (p *npc) run() error {
 func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
-	*serverAddr = "jt.cupb.top:8024"
+	*serverAddr = "file.cupb.top:8024"
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
-	//*verifyKey = "ozsathdqpjilcbs0"
+	*verifyKey = "ozsathdqpjilcbs0"
+	*verifyKey = "e1mo4s47kx0idy17" // 河北省邢台市巨鹿县 	121.27.128.172
+	*verifyKey = "mj0xngim0pohl0lq" // 白沟网点
+	*verifyKey = "sedh1v6rt0p5v9dh" // 白沟网点
+	*verifyKey = "qxbvakdjo5x8pnmi" // 柏乡
+	*verifyKey = "cw5efx5w6yqz9e14" // 石家庄市桥西区
+	*verifyKey = "3p2uhlwv98idgz89" // 河北石家庄
 	*connType = "tcp"
 
 	//p2p or secret command
