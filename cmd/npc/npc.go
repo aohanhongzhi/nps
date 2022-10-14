@@ -206,9 +206,10 @@ func (p *npc) run() error {
 func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
-	*serverAddr = "jt.cupb.top:8024"
+	*serverAddr = "file.cupb.top:8024"
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	//*verifyKey = "ozsathdqpjilcbs0"
+	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 	*connType = "tcp"
 
 	//p2p or secret command
