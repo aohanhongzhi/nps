@@ -206,7 +206,7 @@ func (p *npc) run() error {
 func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
-	*serverAddr = "file.cupb.top:8024"
+	*serverAddr = "proxy.cupb.top:8024"
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	//*verifyKey = "ozsathdqpjilcbs0"
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
