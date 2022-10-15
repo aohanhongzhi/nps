@@ -210,6 +210,8 @@ func run() {
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	//*verifyKey = "ozsathdqpjilcbs0"
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
+	*verifyKey = "5myyool4o5wl6m0w" //白沟
+	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*connType = "tcp"
 
 	//p2p or secret command
