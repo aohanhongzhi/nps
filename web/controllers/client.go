@@ -6,6 +6,7 @@ import (
 	"ehang.io/nps/lib/rate"
 	"ehang.io/nps/server"
 	"github.com/astaxie/beego"
+	log "github.com/sirupsen/logrus"
 )
 
 type ClientController struct {
@@ -155,6 +156,7 @@ func (s *ClientController) ChangeStatus() {
 	if client, err := file.GetDb().GetClient(id); err == nil {
 		client.Status = s.GetBoolNoErr("status")
 		if client.Status == false {
+			log.Info("删除链接 %v", client.Id)
 			server.DelClientConnect(client.Id)
 		}
 		s.AjaxOk("modified success")
