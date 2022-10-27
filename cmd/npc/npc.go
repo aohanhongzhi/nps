@@ -207,13 +207,14 @@ func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
 	*serverAddr = "proxy.cupb.top:8024"
-	*serverAddr = "localhost:8024"
+	//*serverAddr = "localhost:8024"
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	//*verifyKey = "ozsathdqpjilcbs0"
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 	*verifyKey = "5myyool4o5wl6m0w" //白沟
 	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*verifyKey = "n7dvxnh1bd3zjlj6" //邢台
+	*verifyKey = "4szvsq9ojbycyyuv" //河北省张家口市万全区
 	*connType = "tcp"
 
 	//p2p or secret command

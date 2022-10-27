@@ -10,7 +10,7 @@ CGO_ENABLED=0 go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
 linux下
 
 ```shell
-CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-H windowsgui -w -s -extldflags -static" ./cmd/npc/npc.go
 ```
 
 
