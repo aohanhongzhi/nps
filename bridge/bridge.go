@@ -21,6 +21,7 @@ import (
 	"ehang.io/nps/server/tool"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
+	log "github.com/sirupsen/logrus"
 )
 
 type Client struct {
@@ -89,7 +90,7 @@ func (s *Bridge) StartTunnel() error {
 	return nil
 }
 
-//get health information form client
+// get health information form client
 func (s *Bridge) GetHealthFromClient(id int, c *conn.Conn) {
 	for {
 		if info, status, err := c.GetHealthInfo(); err != nil {
@@ -154,7 +155,7 @@ func (s *Bridge) GetHealthFromClient(id int, c *conn.Conn) {
 	s.DelClient(id)
 }
 
-//验证失败，返回错误验证flag，并且关闭连接
+// 验证失败，返回错误验证flag，并且关闭连接
 func (s *Bridge) verifyError(c *conn.Conn) {
 	c.Write([]byte(common.VERIFY_EER))
 }
@@ -224,7 +225,7 @@ func (s *Bridge) DelClient(id int) {
 	}
 }
 
-//use different
+// use different
 func (s *Bridge) typeDeal(typeVal string, c *conn.Conn, id int, vs string) {
 	isPub := file.GetDb().IsPubClient(id)
 	switch typeVal {
@@ -248,6 +249,7 @@ func (s *Bridge) typeDeal(typeVal string, c *conn.Conn, id int, vs string) {
 			v.(*Client).Version = vs
 		}
 		go s.GetHealthFromClient(id, c)
+		log.Infof("服务上线 %v", id)
 		logs.Info("clientId %d connection succeeded, address:%s ", id, c.Conn.RemoteAddr())
 	case common.WORK_CHAN:
 		muxConn := nps_mux.NewMux(c.Conn, s.tunnelType, s.disconnectTime)
@@ -303,7 +305,7 @@ func (s *Bridge) typeDeal(typeVal string, c *conn.Conn, id int, vs string) {
 	return
 }
 
-//register ip
+// register ip
 func (s *Bridge) register(c *conn.Conn) {
 	var hour int32
 	if err := binary.Read(c, binary.LittleEndian, &hour); err == nil {
@@ -387,7 +389,7 @@ func (s *Bridge) ping() {
 	}
 }
 
-//get config and add task from client config
+// get config and add task from client config
 func (s *Bridge) getConfig(c *conn.Conn, isPub bool, client *file.Client) {
 	var fail bool
 loop:
