@@ -5,7 +5,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"io"
 	"net"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -250,6 +252,7 @@ func (s *Bridge) typeDeal(typeVal string, c *conn.Conn, id int, vs string) {
 		}
 		go s.GetHealthFromClient(id, c)
 		log.Infof("服务上线 %v", id)
+		NoticeJitu(id)
 		logs.Info("clientId %d connection succeeded, address:%s ", id, c.Conn.RemoteAddr())
 	case common.WORK_CHAN:
 		muxConn := nps_mux.NewMux(c.Conn, s.tunnelType, s.disconnectTime)
@@ -535,4 +538,30 @@ loop:
 		s.DelClient(client.Id)
 	}
 	c.Close()
+}
+
+// 上线通知到极兔
+func NoticeJitu(npsId int) {
+	var jtClient = &http.Client{}
+	var paramBody = strings.NewReader(`{"npsId":` + strconv.Itoa(npsId) + `}`)
+	req, err := http.NewRequest("POST", "http://jt.cupb.top:2831/nps", paramBody)
+	if err != nil {
+		log.Error(err)
+	} else {
+		var resp *http.Response
+		resp, err = jtClient.Do(req)
+		if err != nil {
+			log.Error("请求错误")
+		} else {
+			if resp != nil && resp.Body != nil {
+				defer resp.Body.Close()
+				bodyText, err := io.ReadAll(resp.Body)
+				if err != nil {
+					log.Error(err)
+				}
+				log.Infof("%s", bodyText)
+			}
+		}
+	}
+
 }
