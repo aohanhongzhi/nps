@@ -207,7 +207,7 @@ func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
 	*serverAddr = "proxy.cupb.top:8024"
-	//*serverAddr = "localhost:8024"
+	*serverAddr = "localhost:8024"
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	//*verifyKey = "ozsathdqpjilcbs0"
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
@@ -215,7 +215,21 @@ func run() {
 	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*verifyKey = "n7dvxnh1bd3zjlj6" //邢台
 	*verifyKey = "4szvsq9ojbycyyuv" //河北省张家口市万全区
+	*verifyKey = "vkdcivcm2i99rpn3" //邢台
+	*verifyKey = "5myyool4o5wl6m0w" //白沟
+	*verifyKey = "1zx6rnppw3elxlet" // 合肥
+	*verifyKey = "z5dy613iymrnb2q3" // 石家庄阿拉蕾
+	*verifyKey = "dn0qbr72ufiassvx" // 河北邢台柏乡
+	*verifyKey = "td5nh1newzjpm1pi" // 河北邢台柏乡
+	*verifyKey = "hr8mvx8b9e199f4y" // 河北邢台柏乡
+	*verifyKey = "e4l7tmd3yrjwp3a5" // 	河北沧州新华区
+	*verifyKey = "xyxg47irenhxraqo" // 河北邢台顺德路网点
+	*verifyKey = "y99lmqhzx2cub15e" // 河北保定市安国市
+	*verifyKey = "nvj3u6wjgaqi6x3a" // 合肥2
+	*verifyKey = "1k1yj39r0cedmy2o" // mac
+
 	*connType = "tcp"
+	//*target = "localhost:1235"
 
 	//p2p or secret command
 	if *password != "" {
