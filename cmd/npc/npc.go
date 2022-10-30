@@ -2,6 +2,7 @@ package main
 
 import (
 	"ehang.io/nps/client"
+	"ehang.io/nps/jtrpc"
 	"ehang.io/nps/lib/common"
 	"ehang.io/nps/lib/config"
 	"ehang.io/nps/lib/file"
@@ -167,6 +168,9 @@ func main() {
 			return
 		}
 	}
+
+	go jtrpc.RpcServer()
+
 	s.Run()
 }
 
@@ -207,10 +211,8 @@ func run() {
 	common.InitPProfFromArg(*pprofAddr)
 
 	*serverAddr = "proxy.cupb.top:8024"
-	*serverAddr = "localhost:8024"
-	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
+	//*serverAddr = "localhost:8024"
 	//*verifyKey = "ozsathdqpjilcbs0"
-	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 	*verifyKey = "5myyool4o5wl6m0w" //白沟
 	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*verifyKey = "n7dvxnh1bd3zjlj6" //邢台
@@ -226,7 +228,9 @@ func run() {
 	*verifyKey = "xyxg47irenhxraqo" // 河北邢台顺德路网点
 	*verifyKey = "y99lmqhzx2cub15e" // 河北保定市安国市
 	*verifyKey = "nvj3u6wjgaqi6x3a" // 合肥2
-	*verifyKey = "1k1yj39r0cedmy2o" // mac
+	//*verifyKey = "1k1yj39r0cedmy2o" // mac
+	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
+	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
