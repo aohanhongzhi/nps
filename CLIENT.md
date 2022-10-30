@@ -1,3 +1,10 @@
+
+## 代理
+
+```
+GOPROXY=https://goproxy.cn,direct
+```
+
 -server=jt.cupb.top:8024 -vkey=bdim8smm4o29dgoy -type=tcp
 
 
