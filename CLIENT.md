@@ -1,3 +1,6 @@
+管理员页面
+
+http://proxy-admin.cupb.top/login/index
 
 ## 代理
 
@@ -16,14 +19,19 @@ CGO_ENABLED=0 go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
 
 linux下
 
+不隐藏黑窗
+
 ```shell
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
- CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
-```
+
+隐藏黑窗
+
+```shell
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
--ldflags="-H windowsgui"
+
+> -ldflags="-H windowsgui"
 
 ip地址查询
 
