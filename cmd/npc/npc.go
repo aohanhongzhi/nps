@@ -231,6 +231,10 @@ func run() {
 	//*verifyKey = "1k1yj39r0cedmy2o" // mac
 	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
+	*verifyKey = "7j0jl5b1rxlbme3i" //河北省保定市安国市-公司电脑
+	*verifyKey = "a59r8i9nbuc52xdh" //河北省保定市安国市-公司电脑
+	*verifyKey = "kuy2eqpoi4cli7v6" //河北省承德市宽城满族自治县
+	*verifyKey = "vomz36e6pivgabgj" //河北省沧州市沧县
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
