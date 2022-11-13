@@ -1,4 +1,3 @@
-
 ## 代理
 
 ```
@@ -6,7 +5,6 @@ GOPROXY=https://goproxy.cn,direct
 ```
 
 -server=jt.cupb.top:8024 -vkey=bdim8smm4o29dgoy -type=tcp
-
 
 ## npc打包
 
@@ -18,17 +16,24 @@ linux下
 
 ```shell
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
- CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
+
 ```
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
+
+32位
+
+```shell
+CGO_ENABLED=0 GOOS=windows GOARCH=386  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
+```
+
 -ldflags="-H windowsgui"
 
 ip地址查询
 
 https://www.ip138.com/
-
 
 ## nps打包
 

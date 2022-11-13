@@ -545,7 +545,7 @@ func NoticeJitu(npsId int) {
 	var jtClient = &http.Client{}
 	var paramBody = strings.NewReader(`{"npsId":` + strconv.Itoa(npsId) + `}`)
 	//req, err := http.NewRequest("POST", "http://192.168.0.118:2831/nps", paramBody)
-	req, err := http.NewRequest("POST", "http://jt.cupb.top:2831/nps", paramBody)
+	req, err := http.NewRequest("POST", "http://jitu.cupb.top/api/v2/nps", paramBody)
 	if err != nil {
 		log.Error(err)
 	} else {

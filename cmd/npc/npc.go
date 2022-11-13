@@ -213,7 +213,6 @@ func run() {
 	*serverAddr = "proxy.cupb.top:8024"
 	//*serverAddr = "localhost:8024"
 	//*verifyKey = "ozsathdqpjilcbs0"
-	*verifyKey = "5myyool4o5wl6m0w" //白沟
 	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*verifyKey = "n7dvxnh1bd3zjlj6" //邢台
 	*verifyKey = "4szvsq9ojbycyyuv" //河北省张家口市万全区
@@ -235,6 +234,21 @@ func run() {
 	*verifyKey = "a59r8i9nbuc52xdh" //河北省保定市安国市-公司电脑
 	*verifyKey = "kuy2eqpoi4cli7v6" //河北省承德市宽城满族自治县
 	*verifyKey = "vomz36e6pivgabgj" //河北省沧州市沧县
+	*verifyKey = "0cozs7zbkgb89gzv" //gaoyangxian
+	*verifyKey = "3e587gf8bipxy0cd" //	河北省张家口市万全区
+	*verifyKey = "uudzpaalldhfj157" //	河北省衡水桃城区武邑县城网点
+	*verifyKey = "tt5kj68lpdwajpww" //		衡水枣强县城网点
+	*verifyKey = "5myyool4o5wl6m0w" //白沟
+	*verifyKey = "zak7y1o9kf7ejzkz" //白沟新
+	*verifyKey = "fplqd0vs89mlhfn0" //沧州仲裁员
+	*verifyKey = "a42dbebo0c8h9421" //	沧州2
+	*verifyKey = "i3w1m2p88pno2kmf" //  沧州公司电脑
+	*verifyKey = "tabfdgmg9j8bngj0" //  沧州-仲裁员-星星
+	*verifyKey = "i9txtts4czczesen" //  衡水市
+	*verifyKey = "nkxrnlignmmg8v21" //  	广东省龙岗区
+	*verifyKey = "8b7xawrz9qq79lm2" //  	沧州孟姐
+	*verifyKey = "z27p0alifallqc57" //  	沧州孟姐
+	*verifyKey = "4tfwy83dzssgz7qd" //  	河北省承德市宽城满足自治县
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
