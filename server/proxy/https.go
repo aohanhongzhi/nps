@@ -12,8 +12,8 @@ import (
 	"ehang.io/nps/lib/crypt"
 	"ehang.io/nps/lib/file"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"github.com/pkg/errors"
+	logs "github.com/sirupsen/logrus"
 )
 
 type HttpsServer struct {
@@ -60,7 +60,7 @@ func (https *HttpsServer) Start() error {
 				r := buildHttpsRequest(serverName)
 				if host, err := file.GetDb().GetInfoByHost(serverName, r); err != nil {
 					c.Close()
-					logs.Notice("the url %s can't be parsed!,remote addr %s", serverName, c.RemoteAddr().String())
+					logs.Info("the url %s can't be parsed!,remote addr %s", serverName, c.RemoteAddr().String())
 					return
 				} else {
 					if !common.FileExists(host.CertFilePath) || !common.FileExists(host.KeyFilePath) {
@@ -108,7 +108,7 @@ func (https *HttpsServer) handleHttps(c net.Conn) {
 	var err error
 	if host, err = file.GetDb().GetInfoByHost(hostName, r); err != nil {
 		c.Close()
-		logs.Notice("the url %s can't be parsed!", hostName)
+		logs.Info("the url %s can't be parsed!", hostName)
 		return
 	}
 	if err := https.CheckFlowAndConnNum(host.Client); err != nil {

@@ -3,7 +3,7 @@ package file
 import (
 	"encoding/json"
 	"errors"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 	"os"
 	"path/filepath"
 	"strings"

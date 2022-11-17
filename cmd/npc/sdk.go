@@ -5,14 +5,13 @@ import (
 	"ehang.io/nps/client"
 	"ehang.io/nps/lib/common"
 	"ehang.io/nps/lib/version"
-	"github.com/astaxie/beego/logs"
 )
 
 var cl *client.TRPClient
 
 //export StartClientByVerifyKey
 func StartClientByVerifyKey(serverAddr, verifyKey, connType, proxyUrl *C.char) int {
-	_ = logs.SetLogger("store")
+	//_ = logs.SetLogger("store")
 	if cl != nil {
 		cl.Close()
 	}

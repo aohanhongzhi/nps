@@ -1,7 +1,6 @@
 package common
 
 import (
-	"github.com/astaxie/beego/logs"
 	"time"
 )
 
@@ -10,9 +9,9 @@ const MaxMsgLen = 5000
 var logMsgs string
 
 func init() {
-	logs.Register("store", func() logs.Logger {
-		return new(StoreMsg)
-	})
+	//logs.Register("store", func() logs.Logger {
+	//	return new(StoreMsg)
+	//})
 }
 
 func GetLogMsg() string {

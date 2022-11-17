@@ -15,7 +15,7 @@ import (
 	"ehang.io/nps/lib/crypt"
 	"ehang.io/nps/lib/file"
 	"ehang.io/nps/server/proxy"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 )
 
@@ -139,7 +139,7 @@ func handleUdpMonitor(config *config.CommonConfig, l *config.LocalServer) {
 					return
 				}
 				for i := 0; i < 10; i++ {
-					logs.Notice("try to connect to the server", i+1)
+					logs.Info("try to connect to the server", i+1)
 					newUdpConn(tmpConn.LocalAddr().String(), config, l)
 					if udpConn != nil {
 						udpConnStatus = true
@@ -166,7 +166,7 @@ func handleSecret(localTcpConn net.Conn, config *config.CommonConfig, l *config.
 
 func handleP2PVisitor(localTcpConn net.Conn, config *config.CommonConfig, l *config.LocalServer) {
 	if udpConn == nil {
-		logs.Notice("new conn, P2P can not penetrate successfully, traffic will be transferred through the server")
+		logs.Info("new conn, P2P can not penetrate successfully, traffic will be transferred through the server")
 		handleSecret(localTcpConn, config, l)
 		return
 	}

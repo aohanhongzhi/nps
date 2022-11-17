@@ -22,8 +22,8 @@ import (
 	"ehang.io/nps/server/connection"
 	"ehang.io/nps/server/tool"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	log "github.com/sirupsen/logrus"
+	logs "github.com/sirupsen/logrus"
 )
 
 type Client struct {
@@ -516,7 +516,7 @@ loop:
 					tl.MultiAccount = t.MultiAccount
 					if !client.HasTunnel(tl) {
 						if err := file.GetDb().NewTask(tl); err != nil {
-							logs.Notice("Add task error ", err.Error())
+							logs.Info("Add task error ", err.Error())
 							fail = true
 							c.WriteAddFail()
 							break loop

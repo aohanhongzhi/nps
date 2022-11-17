@@ -10,9 +10,9 @@ import (
 	"ehang.io/nps/lib/version"
 	"flag"
 	"fmt"
-	"github.com/astaxie/beego/logs"
 	"github.com/ccding/go-stun/stun"
 	"github.com/kardianos/service"
+	logs "github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
 	"runtime"
@@ -22,20 +22,20 @@ import (
 )
 
 var (
-	serverAddr     = flag.String("server", "", "Server addr (ip:port)")
-	configPath     = flag.String("config", "", "Configuration file path")
-	verifyKey      = flag.String("vkey", "", "Authentication key")
-	logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
-	connType       = flag.String("type", "tcp", "Connection type with the server（kcp|tcp）")
-	proxyUrl       = flag.String("proxy", "", "proxy socks5 url(eg:socks5://111:222@127.0.0.1:9007)")
-	logLevel       = flag.String("log_level", "7", "log level 0~7")
-	registerTime   = flag.Int("time", 2, "register time long /h")
-	localPort      = flag.Int("local_port", 2000, "p2p local port")
-	password       = flag.String("password", "", "p2p password flag")
-	target         = flag.String("target", "", "p2p target")
-	localType      = flag.String("local_type", "p2p", "p2p target")
-	logPath        = flag.String("log_path", "", "npc log path")
-	debug          = flag.Bool("debug", true, "npc debug")
+	serverAddr = flag.String("server", "", "Server addr (ip:port)")
+	configPath = flag.String("config", "", "Configuration file path")
+	verifyKey  = flag.String("vkey", "", "Authentication key")
+	//logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
+	connType = flag.String("type", "tcp", "Connection type with the server（kcp|tcp）")
+	proxyUrl = flag.String("proxy", "", "proxy socks5 url(eg:socks5://111:222@127.0.0.1:9007)")
+	//logLevel       = flag.String("log_level", "7", "log level 0~7")
+	registerTime = flag.Int("time", 2, "register time long /h")
+	localPort    = flag.Int("local_port", 2000, "p2p local port")
+	password     = flag.String("password", "", "p2p password flag")
+	target       = flag.String("target", "", "p2p target")
+	localType    = flag.String("local_type", "p2p", "p2p target")
+	logPath      = flag.String("log_path", "", "npc log path")
+	//debug          = flag.Bool("debug", true, "npc debug")
 	pprofAddr      = flag.String("pprof", "", "PProf debug addr (ip:port)")
 	stunAddr       = flag.String("stun_addr", "stun.stunprotocol.org:3478", "stun server address (eg:stun.stunprotocol.org:3478)")
 	ver            = flag.Bool("version", false, "show current version")
@@ -44,9 +44,9 @@ var (
 
 func main() {
 	flag.Parse()
-	logs.Reset()
-	logs.EnableFuncCallDepth(true)
-	logs.SetLogFuncCallDepth(3)
+	//logs.Reset()
+	//logs.EnableFuncCallDepth(true)
+	//logs.SetLogFuncCallDepth(3)
 	if *ver {
 		common.PrintVersion()
 		return
@@ -57,11 +57,11 @@ func main() {
 	if common.IsWindows() {
 		*logPath = strings.Replace(*logPath, "\\", "\\\\", -1)
 	}
-	if *debug {
-		logs.SetLogger(logs.AdapterConsole, `{"level":`+*logLevel+`,"color":true}`)
-	} else {
-		logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
-	}
+	//if *debug {
+	//	logs.SetLogger(logs.AdapterConsole, `{"level":`+*logLevel+`,"color":true}`)
+	//} else {
+	//	logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
+	//}
 
 	// init service
 	options := make(service.KeyValue)
@@ -249,6 +249,8 @@ func run() {
 	*verifyKey = "8b7xawrz9qq79lm2" //  	沧州孟姐
 	*verifyKey = "z27p0alifallqc57" //  	沧州孟姐
 	*verifyKey = "4tfwy83dzssgz7qd" //  	河北省承德市宽城满足自治县
+	*verifyKey = "uudzpaalldhfj157" //  	河北省衡水桃城区武邑县城网点
+	*verifyKey = "ekqukhj6zwu8eass" //  		上海市长宁
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
