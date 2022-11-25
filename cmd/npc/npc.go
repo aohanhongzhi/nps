@@ -249,6 +249,7 @@ func run() {
 	*verifyKey = "8b7xawrz9qq79lm2" //  	沧州孟姐
 	*verifyKey = "z27p0alifallqc57" //  	沧州孟姐
 	*verifyKey = "4tfwy83dzssgz7qd" //  	河北省承德市宽城满足自治县
+	*verifyKey = "jiyof6fuggvd23jy" //  	河北省保定市莲池区
 	*verifyKey = "uudzpaalldhfj157" //  	河北省衡水桃城区武邑县城网点
 	*verifyKey = "ekqukhj6zwu8eass" //  		上海市长宁
 
