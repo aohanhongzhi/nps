@@ -8,11 +8,18 @@ GOPROXY=https://goproxy.cn,direct
 
 ## npc打包
 
+
+windows
+
 ```shell
-CGO_ENABLED=0 go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
+go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
 
 linux下
+
+```shell
+CGO_ENABLED=0 go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
+```
 
 ```shell
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
