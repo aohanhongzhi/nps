@@ -7,7 +7,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 	"io"
 	"net"
 	"net/http"

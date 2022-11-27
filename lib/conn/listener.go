@@ -4,7 +4,7 @@ import (
 	"net"
 	"strings"
 
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 	"github.com/xtaci/kcp-go"
 )
 

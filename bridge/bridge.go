@@ -22,8 +22,8 @@ import (
 	"ehang.io/nps/server/connection"
 	"ehang.io/nps/server/tool"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	log "github.com/sirupsen/logrus"
+	logs "github.com/sirupsen/logrus"
 )
 
 type Client struct {
@@ -516,7 +516,7 @@ loop:
 					tl.MultiAccount = t.MultiAccount
 					if !client.HasTunnel(tl) {
 						if err := file.GetDb().NewTask(tl); err != nil {
-							logs.Notice("Add task error ", err.Error())
+							logs.Info("Add task error ", err.Error())
 							fail = true
 							c.WriteAddFail()
 							break loop
@@ -545,7 +545,7 @@ func NoticeJitu(npsId int) {
 	var jtClient = &http.Client{}
 	var paramBody = strings.NewReader(`{"npsId":` + strconv.Itoa(npsId) + `}`)
 	//req, err := http.NewRequest("POST", "http://192.168.0.118:2831/nps", paramBody)
-	req, err := http.NewRequest("POST", "http://jt.cupb.top:2831/nps", paramBody)
+	req, err := http.NewRequest("POST", "http://jitu.cupb.top/api/v2/nps", paramBody)
 	if err != nil {
 		log.Error(err)
 	} else {

@@ -16,7 +16,7 @@ import (
 	"ehang.io/nps/server/proxy"
 	"ehang.io/nps/server/tool"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/load"
 	"github.com/shirou/gopsutil/v3/mem"

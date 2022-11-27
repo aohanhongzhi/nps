@@ -10,6 +10,8 @@ import (
 
 func RpcServer() {
 
+	log.SetLevel(log.FatalLevel)
+
 	args := os.Args
 
 	rpcJitu := new(RPCJitu)

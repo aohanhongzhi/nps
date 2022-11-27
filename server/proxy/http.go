@@ -19,7 +19,7 @@ import (
 	"ehang.io/nps/lib/conn"
 	"ehang.io/nps/lib/file"
 	"ehang.io/nps/server/connection"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 )
 
 type httpServer struct {
@@ -140,7 +140,7 @@ reset:
 		host.Client.AddConn()
 	}
 	if host, err = file.GetDb().GetInfoByHost(r.Host, r); err != nil {
-		logs.Notice("the url %s %s %s can't be parsed!", r.URL.Scheme, r.Host, r.RequestURI)
+		logs.Info("the url %s %s %s can't be parsed!", r.URL.Scheme, r.Host, r.RequestURI)
 		return
 	}
 	if err := s.CheckFlowAndConnNum(host.Client); err != nil {
@@ -160,7 +160,7 @@ reset:
 	}
 	lk = conn.NewLink("http", targetAddr, host.Client.Cnf.Crypt, host.Client.Cnf.Compress, r.RemoteAddr, host.Target.LocalProxy)
 	if target, err = s.bridge.SendLinkInfo(host.Client.Id, lk, nil); err != nil {
-		logs.Notice("connect to target %s error %s", lk.Host, err)
+		logs.Info("connect to target %s error %s", lk.Host, err)
 		return
 	}
 	connClient = conn.GetConn(target, lk.Crypt, lk.Compress, host.Client.Rate, true)
@@ -240,7 +240,7 @@ reset:
 		//What happened ，Why one character less???
 		r.Method = resetReqMethod(r.Method)
 		if hostTmp, err := file.GetDb().GetInfoByHost(r.Host, r); err != nil {
-			logs.Notice("the url %s %s %s can't be parsed!", r.URL.Scheme, r.Host, r.RequestURI)
+			logs.Info("the url %s %s %s can't be parsed!", r.URL.Scheme, r.Host, r.RequestURI)
 			break
 		} else if host != hostTmp {
 			host = hostTmp

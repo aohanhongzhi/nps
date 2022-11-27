@@ -10,9 +10,9 @@ import (
 	"ehang.io/nps/lib/version"
 	"flag"
 	"fmt"
-	"github.com/astaxie/beego/logs"
 	"github.com/ccding/go-stun/stun"
 	"github.com/kardianos/service"
+	logs "github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
 	"runtime"
@@ -22,20 +22,20 @@ import (
 )
 
 var (
-	serverAddr     = flag.String("server", "", "Server addr (ip:port)")
-	configPath     = flag.String("config", "", "Configuration file path")
-	verifyKey      = flag.String("vkey", "", "Authentication key")
-	logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
-	connType       = flag.String("type", "tcp", "Connection type with the server（kcp|tcp）")
-	proxyUrl       = flag.String("proxy", "", "proxy socks5 url(eg:socks5://111:222@127.0.0.1:9007)")
-	logLevel       = flag.String("log_level", "7", "log level 0~7")
-	registerTime   = flag.Int("time", 2, "register time long /h")
-	localPort      = flag.Int("local_port", 2000, "p2p local port")
-	password       = flag.String("password", "", "p2p password flag")
-	target         = flag.String("target", "", "p2p target")
-	localType      = flag.String("local_type", "p2p", "p2p target")
-	logPath        = flag.String("log_path", "", "npc log path")
-	debug          = flag.Bool("debug", true, "npc debug")
+	serverAddr = flag.String("server", "", "Server addr (ip:port)")
+	configPath = flag.String("config", "", "Configuration file path")
+	verifyKey  = flag.String("vkey", "", "Authentication key")
+	//logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
+	connType = flag.String("type", "tcp", "Connection type with the server（kcp|tcp）")
+	proxyUrl = flag.String("proxy", "", "proxy socks5 url(eg:socks5://111:222@127.0.0.1:9007)")
+	//logLevel       = flag.String("log_level", "7", "log level 0~7")
+	registerTime = flag.Int("time", 2, "register time long /h")
+	localPort    = flag.Int("local_port", 2000, "p2p local port")
+	password     = flag.String("password", "", "p2p password flag")
+	target       = flag.String("target", "", "p2p target")
+	localType    = flag.String("local_type", "p2p", "p2p target")
+	logPath      = flag.String("log_path", "", "npc log path")
+	//debug          = flag.Bool("debug", true, "npc debug")
 	pprofAddr      = flag.String("pprof", "", "PProf debug addr (ip:port)")
 	stunAddr       = flag.String("stun_addr", "stun.stunprotocol.org:3478", "stun server address (eg:stun.stunprotocol.org:3478)")
 	ver            = flag.Bool("version", false, "show current version")
@@ -44,9 +44,9 @@ var (
 
 func main() {
 	flag.Parse()
-	logs.Reset()
-	logs.EnableFuncCallDepth(true)
-	logs.SetLogFuncCallDepth(3)
+	//logs.Reset()
+	//logs.EnableFuncCallDepth(true)
+	//logs.SetLogFuncCallDepth(3)
 	if *ver {
 		common.PrintVersion()
 		return
@@ -57,11 +57,11 @@ func main() {
 	if common.IsWindows() {
 		*logPath = strings.Replace(*logPath, "\\", "\\\\", -1)
 	}
-	if *debug {
-		logs.SetLogger(logs.AdapterConsole, `{"level":`+*logLevel+`,"color":true}`)
-	} else {
-		logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
-	}
+	//if *debug {
+	//	logs.SetLogger(logs.AdapterConsole, `{"level":`+*logLevel+`,"color":true}`)
+	//} else {
+	//	logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
+	//}
 
 	// init service
 	options := make(service.KeyValue)
@@ -213,7 +213,6 @@ func run() {
 	*serverAddr = "proxy.cupb.top:8024"
 	//*serverAddr = "localhost:8024"
 	//*verifyKey = "ozsathdqpjilcbs0"
-	*verifyKey = "5myyool4o5wl6m0w" //白沟
 	*verifyKey = "vkdcivcm2i99rpn3" //邢台
 	*verifyKey = "n7dvxnh1bd3zjlj6" //邢台
 	*verifyKey = "4szvsq9ojbycyyuv" //河北省张家口市万全区
@@ -229,8 +228,33 @@ func run() {
 	*verifyKey = "y99lmqhzx2cub15e" // 河北保定市安国市
 	*verifyKey = "nvj3u6wjgaqi6x3a" // 合肥2
 	//*verifyKey = "1k1yj39r0cedmy2o" // mac
-	*verifyKey = "bdim8smm4o29dgoy" // 我自己的
+
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
+	*verifyKey = "7j0jl5b1rxlbme3i" //河北省保定市安国市-公司电脑
+	*verifyKey = "a59r8i9nbuc52xdh" //河北省保定市安国市-公司电脑
+	*verifyKey = "kuy2eqpoi4cli7v6" //河北省承德市宽城满族自治县
+	*verifyKey = "vomz36e6pivgabgj" //河北省沧州市沧县
+	*verifyKey = "0cozs7zbkgb89gzv" //gaoyangxian
+	*verifyKey = "3e587gf8bipxy0cd" //	河北省张家口市万全区
+	*verifyKey = "uudzpaalldhfj157" //	河北省衡水桃城区武邑县城网点
+	*verifyKey = "tt5kj68lpdwajpww" //		衡水枣强县城网点
+	*verifyKey = "5myyool4o5wl6m0w" //白沟
+	*verifyKey = "zak7y1o9kf7ejzkz" //白沟新
+	*verifyKey = "fplqd0vs89mlhfn0" //沧州仲裁员
+	*verifyKey = "a42dbebo0c8h9421" //	沧州2
+	*verifyKey = "i3w1m2p88pno2kmf" //  沧州公司电脑
+	*verifyKey = "tabfdgmg9j8bngj0" //  沧州-仲裁员-星星
+	*verifyKey = "i9txtts4czczesen" //  衡水市
+	*verifyKey = "nkxrnlignmmg8v21" //  	广东省龙岗区
+	*verifyKey = "8b7xawrz9qq79lm2" //  	沧州孟姐
+	*verifyKey = "z27p0alifallqc57" //  	沧州孟姐
+	*verifyKey = "4tfwy83dzssgz7qd" //  	河北省承德市宽城满足自治县
+	*verifyKey = "jiyof6fuggvd23jy" //  	河北省保定市莲池区
+	*verifyKey = "uudzpaalldhfj157" //  	河北省衡水桃城区武邑县城网点
+	*verifyKey = "ekqukhj6zwu8eass" //  		上海市长宁
+	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
+	*verifyKey = "3znisuvuhssvltzs" //  安徽亳州
+	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
 
 	*connType = "tcp"
 	//*target = "localhost:1235"

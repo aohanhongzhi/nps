@@ -13,7 +13,7 @@ import (
 	"ehang.io/nps/lib/file"
 	"ehang.io/nps/server/connection"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 )
 
 type TunnelModeServer struct {

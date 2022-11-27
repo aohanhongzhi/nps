@@ -22,7 +22,7 @@ import (
 	"ehang.io/nps/lib/crypt"
 	"ehang.io/nps/lib/daemon"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
+	logs "github.com/sirupsen/logrus"
 
 	"github.com/kardianos/service"
 )
@@ -46,9 +46,9 @@ func main() {
 	if level = beego.AppConfig.String("log_level"); level == "" {
 		level = "7"
 	}
-	logs.Reset()
-	logs.EnableFuncCallDepth(true)
-	logs.SetLogFuncCallDepth(3)
+	//logs.Reset()
+	//logs.EnableFuncCallDepth(true)
+	//logs.SetLogFuncCallDepth(3)
 	logPath := beego.AppConfig.String("log_path")
 	if logPath == "" {
 		logPath = common.GetLogPath()
@@ -65,11 +65,11 @@ func main() {
 		Option:      options,
 	}
 	svcConfig.Arguments = append(svcConfig.Arguments, "service")
-	if len(os.Args) > 1 && os.Args[1] == "service" {
-		_ = logs.SetLogger(logs.AdapterFile, `{"level":`+level+`,"filename":"`+logPath+`","daily":false,"maxlines":100000,"color":true}`)
-	} else {
-		_ = logs.SetLogger(logs.AdapterConsole, `{"level":`+level+`,"color":true}`)
-	}
+	//if len(os.Args) > 1 && os.Args[1] == "service" {
+	//	_ = logs.SetLogger(logs.AdapterFile, `{"level":`+level+`,"filename":"`+logPath+`","daily":false,"maxlines":100000,"color":true}`)
+	//} else {
+	//	_ = logs.SetLogger(logs.AdapterConsole, `{"level":`+level+`,"color":true}`)
+	//}
 	if !common.IsWindows() {
 		svcConfig.Dependencies = []string{
 			"Requires=network.target",
