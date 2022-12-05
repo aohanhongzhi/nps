@@ -255,6 +255,7 @@ func run() {
 	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
 	*verifyKey = "3znisuvuhssvltzs" //  安徽亳州
 	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
+	*verifyKey = "hhpreh0r4zsbfo1p" //  河北省唐山市开平区-王小二-王小二
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
