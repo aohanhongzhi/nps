@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -61,6 +62,13 @@ retry:
 	c, err := NewConn(s.bridgeConnType, s.vKey, s.svrAddr, common.WORK_MAIN, s.proxyUrl)
 	if err != nil {
 		logs.Error("The connection server failed and will be reconnected in five seconds, error", err.Error())
+
+		if strings.Contains(err.Error(), "Validation key") {
+
+		} else if strings.Contains(err.Error(), "no such host") {
+			s.svrAddr = "139.217.230.42:8024"
+		}
+
 		time.Sleep(time.Second * 5)
 		goto retry
 	}

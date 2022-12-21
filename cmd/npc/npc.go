@@ -227,7 +227,6 @@ func run() {
 	*verifyKey = "xyxg47irenhxraqo" // 河北邢台顺德路网点
 	*verifyKey = "y99lmqhzx2cub15e" // 河北保定市安国市
 	*verifyKey = "nvj3u6wjgaqi6x3a" // 合肥2
-	//*verifyKey = "1k1yj39r0cedmy2o" // mac
 
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 	*verifyKey = "7j0jl5b1rxlbme3i" //河北省保定市安国市-公司电脑
@@ -256,6 +255,7 @@ func run() {
 	*verifyKey = "3znisuvuhssvltzs" //  安徽亳州
 	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
 	*verifyKey = "hhpreh0r4zsbfo1p" //  河北省唐山市开平区-王小二-王小二
+	*verifyKey = "pdz2bikk5iwjef5b" // mac
 
 	*connType = "tcp"
 	//*target = "localhost:1235"

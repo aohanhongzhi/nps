@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func init1() {
+func init() {
 	// 参考文章 https://juejin.cn/post/7026912807333888014
 	logPath := "./log"
 	errorLogPath := "./log/error/"
