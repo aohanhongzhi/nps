@@ -252,10 +252,10 @@ func run() {
 	*verifyKey = "jiyof6fuggvd23jy" //  	河北省保定市莲池区
 	*verifyKey = "uudzpaalldhfj157" //  	河北省衡水桃城区武邑县城网点
 	*verifyKey = "ekqukhj6zwu8eass" //  		上海市长宁
-	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
 	*verifyKey = "3znisuvuhssvltzs" //  安徽亳州
 	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
 	*verifyKey = "hhpreh0r4zsbfo1p" //  河北省唐山市开平区-王小二-王小二
+	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
 
 	*connType = "tcp"
 	//*target = "localhost:1235"

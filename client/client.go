@@ -77,7 +77,7 @@ retry:
 		time.Sleep(time.Second * 5)
 		goto retry
 	}
-	logs.Info("Successful connection with server %s", s.svrAddr)
+	logs.Infof("Successful connection with server %s", s.svrAddr)
 	//monitor the connection
 	go s.ping()
 	s.signal = c

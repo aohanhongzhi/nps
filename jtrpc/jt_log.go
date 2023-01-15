@@ -108,7 +108,7 @@ func init() {
 	} else {
 		// 错误日志发送到钉钉
 		// 设置日志级别
-		log.SetLevel(log.InfoLevel)
+		log.SetLevel(log.FatalLevel)
 		log.SetFormatter(FileFormatter)
 		log.SetOutput(writer)
 	}
