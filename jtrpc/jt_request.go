@@ -1,6 +1,7 @@
 package jtrpc
 
 import (
+	"encoding/json"
 	"github.com/avast/retry-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
@@ -35,13 +36,22 @@ var jtClient = &http.Client{}
 
 func (rPcJitu *RPCJitu) Request(request Request, reply *Response) error {
 	start := time.Now()
-	log.Infof("------>RPC调用来了%v", request.Uuid)
+	log.Debugf("------>RPC调用来了%v", request.Uuid)
 	var result *gjson.Result
 	if request.HttpMethod == "GET" {
 		result = RequestJson("GET", request.Url, nil, request.RouteName, request.Token, request.HeaderMap)
 	} else if request.HttpMethod == "POST" {
 		var data = strings.NewReader(request.ParamBody)
 		result = RequestJson("POST", request.Url, data, request.RouteName, request.Token, request.HeaderMap)
+	} else {
+		marshal, err := json.Marshal(reply)
+		if err != nil {
+			log.Error(err)
+		}
+		log.Errorf("请求错误 %v", marshal)
+		jsonString := `{"msg":"方法不正确，当前是[` + request.HttpMethod + `]","code":405}`
+		result1 := gjson.Parse(jsonString)
+		result = &result1
 	}
 	reply.Result = result
 	status := "未知"
@@ -53,7 +63,7 @@ func (rPcJitu *RPCJitu) Request(request Request, reply *Response) error {
 
 	}
 	total := time.Now().Sub(start)
-	log.Infof("<------RPC返回了 %v,请求状态 %v  %v", request.Uuid, status, total)
+	log.Debugf("<------RPC返回了 %v,请求状态 %v  %v", request.Uuid, status, total)
 	return nil
 }
 
