@@ -256,6 +256,12 @@ func run() {
 	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
 	*verifyKey = "hhpreh0r4zsbfo1p" //  河北省唐山市开平区-王小二-王小二
 	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
+	*verifyKey = "pvgblavi6axm8jvx" // 我自己的 Alienware
+	*verifyKey = "508qdipotgryywf0" // 我自己的 Alienware
+	*verifyKey = "ahjnjff29p6or701" // 高碑店3
+	*verifyKey = "ykvbb45xo8rw0et8" // 白沟新城-公司电脑-杨宇静
+
+	logs.Info("当前clientId %v", *verifyKey)
 
 	*connType = "tcp"
 	//*target = "localhost:1235"
