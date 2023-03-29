@@ -22,6 +22,13 @@ go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 
 linux下
 
+隐藏黑窗
+
+```shell
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -o 白沟.exe -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
+```
+
 不隐藏黑窗
 
 ```shell
@@ -32,12 +39,7 @@ CGO_ENABLED=0 go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/
 CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static" ./cmd/npc/npc.go
 ```
 
-隐藏黑窗
 
-```shell
-CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
-CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -o 白沟.exe -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
-```
 
 > -ldflags="-H windowsgui"
 

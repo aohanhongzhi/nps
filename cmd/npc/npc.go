@@ -260,6 +260,8 @@ func run() {
 	*verifyKey = "508qdipotgryywf0" // 我自己的 Alienware
 	*verifyKey = "ahjnjff29p6or701" // 高碑店3
 	*verifyKey = "ykvbb45xo8rw0et8" // 白沟新城-公司电脑-杨宇静
+	*verifyKey = "hnrs4gy2nwm70pfj" // 	河北省秦皇岛海港区汤河网点-新
+	*verifyKey = "wfr7ketbvq04bnxj" // 	秦皇岛青龙县
 
 	logs.Info("当前clientId %v", *verifyKey)
 
