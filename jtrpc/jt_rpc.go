@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Deprecated  废弃了。不再使用了。
 func RpcServer() {
 
 	args := os.Args

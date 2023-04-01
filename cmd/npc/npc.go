@@ -2,7 +2,6 @@ package main
 
 import (
 	"ehang.io/nps/client"
-	"ehang.io/nps/jtrpc"
 	"ehang.io/nps/lib/common"
 	"ehang.io/nps/lib/config"
 	"ehang.io/nps/lib/file"
@@ -169,8 +168,6 @@ func main() {
 		}
 	}
 
-	go jtrpc.RpcServer()
-
 	s.Run()
 }
 
@@ -227,7 +224,6 @@ func run() {
 	*verifyKey = "xyxg47irenhxraqo" // 河北邢台顺德路网点
 	*verifyKey = "y99lmqhzx2cub15e" // 河北保定市安国市
 	*verifyKey = "nvj3u6wjgaqi6x3a" // 合肥2
-	//*verifyKey = "1k1yj39r0cedmy2o" // mac
 
 	*verifyKey = "3p2uhlwv98idgz89" //Alienware
 	*verifyKey = "7j0jl5b1rxlbme3i" //河北省保定市安国市-公司电脑
@@ -252,18 +248,12 @@ func run() {
 	*verifyKey = "jiyof6fuggvd23jy" //  	河北省保定市莲池区
 	*verifyKey = "uudzpaalldhfj157" //  	河北省衡水桃城区武邑县城网点
 	*verifyKey = "ekqukhj6zwu8eass" //  		上海市长宁
+	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
 	*verifyKey = "3znisuvuhssvltzs" //  安徽亳州
 	*verifyKey = "coketfsi0cgrvl4t" //  中国黑龙江齐齐哈尔龙沙区-王小二客服
 	*verifyKey = "hhpreh0r4zsbfo1p" //  河北省唐山市开平区-王小二-王小二
-	*verifyKey = "3p2uhlwv98idgz89" // 我自己的 Alienware
-	*verifyKey = "pvgblavi6axm8jvx" // 我自己的 Alienware
-	*verifyKey = "508qdipotgryywf0" // 我自己的 Alienware
-	*verifyKey = "ahjnjff29p6or701" // 高碑店3
-	*verifyKey = "ykvbb45xo8rw0et8" // 白沟新城-公司电脑-杨宇静
-	*verifyKey = "hnrs4gy2nwm70pfj" // 	河北省秦皇岛海港区汤河网点-新
-	*verifyKey = "wfr7ketbvq04bnxj" // 	秦皇岛青龙县
-
-	logs.Info("当前clientId %v", *verifyKey)
+	*verifyKey = "pdz2bikk5iwjef5b" // mac
+	*verifyKey = "su64cccki80y93fd" // mac
 
 	*connType = "tcp"
 	//*target = "localhost:1235"

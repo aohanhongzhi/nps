@@ -19,6 +19,10 @@ windows
 ```shell
 go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
+打包32位的程序
+```shell
+go env -w GOARCH=amd64
+```
 
 linux下
 
