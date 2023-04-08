@@ -33,6 +33,7 @@ var (
 )
 
 func main() {
+	logs.SetLevel(logs.FatalLevel)
 	flag.Parse()
 	// init log
 	if *ver {

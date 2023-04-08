@@ -64,5 +64,9 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -extldflags -stat
 ```
 
 ```shell
+go build ./cmd/nps/nps.go
+```
+
+```shell
 sudo nohup nps  >> /tmp/nps.log 2>&1 &
 ```
