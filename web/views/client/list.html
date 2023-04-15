@@ -201,7 +201,7 @@
                 halign: 'center',
                 visible: true,//false表示不显示
                 formatter: function (value, row, index) {
-                    return '<div class="btn-group"><a href="{{.web_base_url}}/index/all?client_id=' + row.Id
+                    return '<div class="btn-group"><a target="_blank" href="{{.web_base_url}}/index/all?client_id=' + row.Id
                         + '" class="btn btn-outline btn-primary" langtag="word-tunnel"></a>'
                         + '<a href="{{.web_base_url}}/index/hostlist?client_id=' + row.Id
                         + '" class="btn btn-outline btn-success" langtag="word-host"></a></div>'
