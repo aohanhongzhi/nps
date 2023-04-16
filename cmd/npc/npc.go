@@ -255,6 +255,28 @@ func run() {
 	*verifyKey = "pdz2bikk5iwjef5b" // mac
 	*verifyKey = "su64cccki80y93fd" // mac
 
+	// 从txt文件里读取verifyKey
+	fileName := "keyFile.txt"
+	_, err := os.Stat(fileName)
+	if err != nil {
+		logs.Errorf("文件%v不存在 %v", fileName, err)
+	}
+	if os.IsNotExist(err) {
+		file1, err1 := os.Create(fileName)
+		//写入文件
+		n, err1 := file1.WriteString(*verifyKey)
+		if err1 != nil {
+			logs.Error("文件写入失败 ", err)
+		} else {
+			logs.Debug(n)
+		}
+	} else {
+		fileContent, fileErr := os.ReadFile(fileName)
+		if fileErr == nil && len(fileContent) > 0 {
+			*verifyKey = string(fileContent)
+		}
+	}
+
 	*connType = "tcp"
 	//*target = "localhost:1235"
 

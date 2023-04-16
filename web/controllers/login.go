@@ -45,6 +45,12 @@ func (self *LoginController) Verify() {
 	self.ServeJSON()
 }
 
+// TODO 等待开发
+func (self *LoginController) Debug() {
+	self.Data["json"] = map[string]interface{}{"status": 1, "msg": "login success"}
+	self.ServeJSON()
+}
+
 func (self *LoginController) doLogin(username, password string, explicit bool) bool {
 	clearIprecord()
 	ip, _, _ := net.SplitHostPort(self.Ctx.Request.RemoteAddr)
