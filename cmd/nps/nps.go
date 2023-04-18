@@ -40,7 +40,9 @@ func main() {
 		common.PrintVersion()
 		return
 	}
-	if err := beego.LoadAppConfig("ini", filepath.Join(common.GetRunPath(), "conf", "nps.conf")); err != nil {
+	configpath := filepath.Join(common.GetRunPath(), "conf", "nps.conf")
+	configpath = "/home/eric/Project/Go/conf/nps.conf"
+	if err := beego.LoadAppConfig("ini", configpath); err != nil {
 		log.Fatalln("load config file error", err.Error())
 	}
 	common.InitPProfFromFile()

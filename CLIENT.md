@@ -70,3 +70,7 @@ go build ./cmd/nps/nps.go
 ```shell
 sudo nohup nps  >> /tmp/nps.log 2>&1 &
 ```
+
+![img.png](img.png)
+
+go tool pprof http://localhost:8080/debug/pprof/profile

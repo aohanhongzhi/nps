@@ -15,6 +15,7 @@ import (
 )
 
 func NewJsonDb(runPath string) *JsonDb {
+	runPath = "/home/eric/Project/Go/"
 	return &JsonDb{
 		RunPath:        runPath,
 		TaskFilePath:   filepath.Join(runPath, "conf", "tasks.json"),
