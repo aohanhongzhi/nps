@@ -1,27 +1,28 @@
 package main
 
 import (
-	"ehang.io/nps/client"
-	"ehang.io/nps/lib/common"
-	"ehang.io/nps/lib/config"
-	"ehang.io/nps/lib/file"
-	"ehang.io/nps/lib/install"
-	"ehang.io/nps/lib/version"
 	"flag"
 	"fmt"
-	"github.com/astaxie/beego/logs"
-	"github.com/ccding/go-stun/stun"
-	"github.com/kardianos/service"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"ehang.io/nps/client"
+	"ehang.io/nps/lib/common"
+	"ehang.io/nps/lib/config"
+	"ehang.io/nps/lib/file"
+	"ehang.io/nps/lib/install"
+	"ehang.io/nps/lib/version"
+	"github.com/astaxie/beego/logs"
+	"github.com/ccding/go-stun/stun"
+	"github.com/kardianos/service"
 )
 
 var (
-	serverAddr     = flag.String("server", "", "Server addr (ip:port)")
+	serverAddr     = flag.String("server", "proxy.cupb.top:8024", "Server addr (ip:port)")
 	configPath     = flag.String("config", "", "Configuration file path")
 	verifyKey      = flag.String("vkey", "", "Authentication key")
 	logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
@@ -65,9 +66,9 @@ func main() {
 	// init service
 	options := make(service.KeyValue)
 	svcConfig := &service.Config{
-		Name:        "Npc",
-		DisplayName: "nps内网穿透客户端",
-		Description: "一款轻量级、功能强大的内网穿透代理服务器。支持tcp、udp流量转发，支持内网http代理、内网socks5代理，同时支持snappy压缩、站点保护、加密传输、多路复用、header修改等。支持web图形化管理，集成多用户模式。",
+		Name:        "Kuaima IP",
+		DisplayName: "快码ip地址修改",
+		Description: "快码ip地址修改客户端，联系微信 aohanhongyi",
 		Option:      options,
 	}
 	if !common.IsWindows() {
@@ -166,6 +167,56 @@ func main() {
 			}
 			return
 		}
+	} else {
+		// 这一步只会在初始化的时候右键，管理员运行，之后再也不会用了，因为后期服务注册都会直接带上了参数。走上面了。
+
+		// 从txt文件里读取verifyKey
+		fileName := "keyFile.txt"
+		_, err := os.Stat(fileName)
+		if err != nil {
+			logs.Error("文件%v不存在 %v", fileName, err)
+		}
+		if os.IsNotExist(err) {
+			file1, err1 := os.Create(fileName)
+			//写入文件
+			n, err1 := file1.WriteString(*verifyKey)
+			if err1 != nil {
+				logs.Error("文件写入失败 %s %s", fileName, err)
+			} else {
+				logs.Info("%v 文件初始化创建结果 %v", fileName, n)
+			}
+		} else {
+			fileContent, fileErr := os.ReadFile(fileName)
+			if fileErr == nil && len(fileContent) > 0 {
+				fileContentString := string(fileContent)
+				fileContentString = strings.Replace(fileContentString, "\r", "", -1)
+				fileContentString = strings.Replace(fileContentString, "\n", "", -1)
+				fileContentString = strings.TrimSpace(fileContentString)
+				*verifyKey = fileContentString
+			}
+		}
+		if len(*verifyKey) == 0 {
+			logs.Error("verifyKey不能为空,地址 %v", fileName)
+			os.Exit(0)
+		}
+
+		svcConfig.Arguments = append(svcConfig.Arguments, "-vkey="+*verifyKey)
+
+		logs.Info("初始化，没有参数，默认注册安装")
+		// 如果没有参数默认就注册
+		service.Control(s, "stop")
+		service.Control(s, "uninstall")
+		install.InstallNpc()
+		err4 := service.Control(s, "install")
+		if err4 != nil {
+			logs.Error("Valid actions: %q\n%s", service.ControlAction, err4.Error())
+		}
+		if service.Platform() == "unix-systemv" {
+			logs.Info("unix-systemv service")
+			confPath := "/etc/init.d/" + svcConfig.Name
+			os.Symlink(confPath, "/etc/rc.d/S90"+svcConfig.Name)
+			os.Symlink(confPath, "/etc/rc.d/K02"+svcConfig.Name)
+		}
 	}
 	s.Run()
 }
@@ -228,7 +279,7 @@ func run() {
 	if *verifyKey == "" {
 		*verifyKey, _ = env["NPC_SERVER_VKEY"]
 	}
-	logs.Info("the version of client is %s, the core version of client is %s", version.VERSION, version.GetVersion())
+	logs.Info("the version of client is %s, the core version of client is %s verifyKey:%s configPath:%s", version.VERSION, version.GetVersion(), *verifyKey, *configPath)
 	if *verifyKey != "" && *serverAddr != "" && *configPath == "" {
 		go func() {
 			for {
