@@ -169,30 +169,31 @@ func main() {
 		}
 	} else {
 		// 这一步只会在初始化的时候右键，管理员运行，之后再也不会用了，因为后期服务注册都会直接带上了参数。走上面了。
-
 		// 从txt文件里读取verifyKey
 		fileName := "keyFile.txt"
-		_, err := os.Stat(fileName)
-		if err != nil {
-			logs.Error("文件%v不存在 %v", fileName, err)
-		}
-		if os.IsNotExist(err) {
-			file1, err1 := os.Create(fileName)
-			//写入文件
-			n, err1 := file1.WriteString(*verifyKey)
-			if err1 != nil {
-				logs.Error("文件写入失败 %s %s", fileName, err)
-			} else {
-				logs.Info("%v 文件初始化创建结果 %v", fileName, n)
+		if len(*verifyKey) == 0 {
+			_, err := os.Stat(fileName)
+			if err != nil {
+				logs.Error("文件%v不存在 %v", fileName, err)
 			}
-		} else {
-			fileContent, fileErr := os.ReadFile(fileName)
-			if fileErr == nil && len(fileContent) > 0 {
-				fileContentString := string(fileContent)
-				fileContentString = strings.Replace(fileContentString, "\r", "", -1)
-				fileContentString = strings.Replace(fileContentString, "\n", "", -1)
-				fileContentString = strings.TrimSpace(fileContentString)
-				*verifyKey = fileContentString
+			if os.IsNotExist(err) {
+				file1, err1 := os.Create(fileName)
+				//写入文件
+				n, err1 := file1.WriteString(*verifyKey)
+				if err1 != nil {
+					logs.Error("文件写入失败 %s %s", fileName, err)
+				} else {
+					logs.Info("%v 文件初始化创建结果 %v", fileName, n)
+				}
+			} else {
+				fileContent, fileErr := os.ReadFile(fileName)
+				if fileErr == nil && len(fileContent) > 0 {
+					fileContentString := string(fileContent)
+					fileContentString = strings.Replace(fileContentString, "\r", "", -1)
+					fileContentString = strings.Replace(fileContentString, "\n", "", -1)
+					fileContentString = strings.TrimSpace(fileContentString)
+					*verifyKey = fileContentString
+				}
 			}
 		}
 		if len(*verifyKey) == 0 {
