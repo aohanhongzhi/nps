@@ -44,6 +44,20 @@ C:\app\go1.20.14.windows-386\go\bin\go run ./cmd/npc/npc.go
 
 ![img_2.png](img_2.png)
 
+powershell不行，必须管理员运行cmd
+
+服务删除
+
+```shell
+sc delete 服务名称
+```
+![img_3.png](img_3.png)
+
+所有服务查询
+
+```shell
+sc queryex type=service state=all
+```
 
 
 ```shell
