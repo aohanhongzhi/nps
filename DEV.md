@@ -97,6 +97,23 @@ CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build -ldflags="-w -s -extldflags -s
 CGO_ENABLED=0 GOOS=windows GOARCH=386  go build -ldflags="-w -s -extldflags -static -H windowsgui" ./cmd/npc/npc.go
 ```
 
+# Arm7 打包
+
+官方有arm打包的
+
+ARMv7	supported	GOARM=7	GOARCH=arm
+
+GOARCH=arm GOARM=7 GOOS=linux go build
+
+go env -w GOARCH=arm
+go env -w  GOARM=7
+go env -w  GOOS=linux
+
+
+set GOGCCFLAGS=-fPIC -marm -pthread -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=C:\Users\Eric\AppData\Local\Temp\go-build906756486=/tmp/go-build -gno-record-gcc-switches
+
+go env -w  GOGCCFLAGS=
+
 ip地址查询
 
 https://www.ip138.com/
