@@ -28,7 +28,7 @@ var (
 	logType        = flag.String("log", "stdout", "Log output mode（stdout|file）")
 	connType       = flag.String("type", "tcp", "Connection type with the server（kcp|tcp）")
 	proxyUrl       = flag.String("proxy", "", "proxy socks5 url(eg:socks5://111:222@127.0.0.1:9007)")
-	logLevel       = flag.String("log_level", "7", "log level 0~7")
+	logLevel       = flag.String("log_level", "2", "log level 0~7") // 需要显示日志改成 7 参考 logs.LevelDebug
 	registerTime   = flag.Int("time", 2, "register time long /h")
 	localPort      = flag.Int("local_port", 2000, "p2p local port")
 	password       = flag.String("password", "", "p2p password flag")
@@ -47,7 +47,7 @@ func main() {
 	logs.Reset()
 	logs.EnableFuncCallDepth(true)
 	logs.SetLogFuncCallDepth(3)
-	logs.SetLevel(logs.LevelCritical) // 设置日志级别为 Critical ，不需要输出日志，避免磁盘满了。
+	//logs.SetLevel(logs.LevelCritical) // 设置日志级别为 Critical ，不需要输出日志，避免磁盘满了。  上面log_level 改成2即可
 	if *ver {
 		common.PrintVersion()
 		return
@@ -102,52 +102,120 @@ func main() {
 		wg.Wait()
 		return
 	}
-	if len(os.Args) >= 2 {
-		switch os.Args[1] {
-		case "status":
-			if len(os.Args) > 2 {
-				path := strings.Replace(os.Args[2], "-config=", "", -1)
-				client.GetTaskStatus(path)
-			}
-		case "register":
-			flag.CommandLine.Parse(os.Args[2:])
-			client.RegisterLocalIp(*serverAddr, *verifyKey, *connType, *proxyUrl, *registerTime)
-		case "update":
-			install.UpdateNpc()
-			return
-		case "nat":
-			c := stun.NewClient()
-			c.SetServerAddr(*stunAddr)
-			nat, host, err := c.Discover()
-			if err != nil || host == nil {
-				logs.Error("get nat type error", err)
+
+	// 如果是给arm开发板使用，就不需要下面这么多注册服务啥的，直接false即可。 一般电脑就是true，注册服务。
+	// TODO 尝试调用另一个文件，后缀用arm和非arm来区分即可决定函数在编译时候的执行。这样就不会改了
+	if true {
+		if len(os.Args) >= 2 {
+			switch os.Args[1] {
+			case "status":
+				if len(os.Args) > 2 {
+					path := strings.Replace(os.Args[2], "-config=", "", -1)
+					client.GetTaskStatus(path)
+				}
+			case "register":
+				flag.CommandLine.Parse(os.Args[2:])
+				client.RegisterLocalIp(*serverAddr, *verifyKey, *connType, *proxyUrl, *registerTime)
+			case "update":
+				install.UpdateNpc()
 				return
-			}
-			fmt.Printf("nat type: %s \npublic address: %s\n", nat.String(), host.String())
-			os.Exit(0)
-		case "start", "stop", "restart":
-			// support busyBox and sysV, for openWrt
-			if service.Platform() == "unix-systemv" {
-				logs.Info("unix-systemv service")
-				cmd := exec.Command("/etc/init.d/"+svcConfig.Name, os.Args[1])
-				err := cmd.Run()
+			case "nat":
+				c := stun.NewClient()
+				c.SetServerAddr(*stunAddr)
+				nat, host, err := c.Discover()
+				if err != nil || host == nil {
+					logs.Error("get nat type error", err)
+					return
+				}
+				fmt.Printf("nat type: %s \npublic address: %s\n", nat.String(), host.String())
+				os.Exit(0)
+			case "start", "stop", "restart":
+				// support busyBox and sysV, for openWrt
+				if service.Platform() == "unix-systemv" {
+					logs.Info("unix-systemv service")
+					cmd := exec.Command("/etc/init.d/"+svcConfig.Name, os.Args[1])
+					err := cmd.Run()
+					if err != nil {
+						logs.Error(err)
+					}
+					return
+				}
+				err := service.Control(s, os.Args[1])
 				if err != nil {
-					logs.Error(err)
+					logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
+				}
+				return
+			case "install":
+				service.Control(s, "stop")
+				service.Control(s, "uninstall")
+				install.InstallNpc()
+				err := service.Control(s, os.Args[1])
+				if err != nil {
+					logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
+				}
+				if service.Platform() == "unix-systemv" {
+					logs.Info("unix-systemv service")
+					confPath := "/etc/init.d/" + svcConfig.Name
+					os.Symlink(confPath, "/etc/rc.d/S90"+svcConfig.Name)
+					os.Symlink(confPath, "/etc/rc.d/K02"+svcConfig.Name)
+				}
+				return
+			case "uninstall":
+				err := service.Control(s, os.Args[1])
+				if err != nil {
+					logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
+				}
+				if service.Platform() == "unix-systemv" {
+					logs.Info("unix-systemv service")
+					os.Remove("/etc/rc.d/S90" + svcConfig.Name)
+					os.Remove("/etc/rc.d/K02" + svcConfig.Name)
 				}
 				return
 			}
-			err := service.Control(s, os.Args[1])
-			if err != nil {
-				logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
+		} else {
+			// 这一步只会在初始化的时候右键，管理员运行，之后再也不会用了，因为后期服务注册都会直接带上了参数。走上面了。
+			// 从txt文件里读取verifyKey
+			fileName := "keyFile.txt"
+			if len(*verifyKey) == 0 {
+				_, err := os.Stat(fileName)
+				if err != nil {
+					logs.Error("文件%v不存在 %v", fileName, err)
+				}
+				if os.IsNotExist(err) {
+					file1, err1 := os.Create(fileName)
+					//写入文件
+					n, err1 := file1.WriteString(*verifyKey)
+					if err1 != nil {
+						logs.Error("文件写入失败 %s %s", fileName, err)
+					} else {
+						logs.Info("%v 文件初始化创建结果 %v", fileName, n)
+					}
+				} else {
+					fileContent, fileErr := os.ReadFile(fileName)
+					if fileErr == nil && len(fileContent) > 0 {
+						fileContentString := string(fileContent)
+						fileContentString = strings.Replace(fileContentString, "\r", "", -1)
+						fileContentString = strings.Replace(fileContentString, "\n", "", -1)
+						fileContentString = strings.TrimSpace(fileContentString)
+						*verifyKey = fileContentString
+					}
+				}
 			}
-			return
-		case "install":
+			if len(*verifyKey) == 0 {
+				logs.Error("verifyKey不能为空,地址 %v", fileName)
+				os.Exit(0)
+			}
+
+			svcConfig.Arguments = append(svcConfig.Arguments, "-vkey="+*verifyKey)
+			msg := fmt.Sprintf("初始化，没有参数，默认注册安装,key:%v", *verifyKey)
+			logs.Info(msg)
+			// 如果没有参数默认就注册
 			service.Control(s, "stop")
 			service.Control(s, "uninstall")
-			install.InstallNpc()
-			err := service.Control(s, os.Args[1])
-			if err != nil {
-				logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
+			//install.InstallNpc()
+			err4 := service.Control(s, "install")
+			if err4 != nil {
+				logs.Error("Valid actions: %q\n%s", service.ControlAction, err4.Error())
 			}
 			if service.Platform() == "unix-systemv" {
 				logs.Info("unix-systemv service")
@@ -155,69 +223,6 @@ func main() {
 				os.Symlink(confPath, "/etc/rc.d/S90"+svcConfig.Name)
 				os.Symlink(confPath, "/etc/rc.d/K02"+svcConfig.Name)
 			}
-			return
-		case "uninstall":
-			err := service.Control(s, os.Args[1])
-			if err != nil {
-				logs.Error("Valid actions: %q\n%s", service.ControlAction, err.Error())
-			}
-			if service.Platform() == "unix-systemv" {
-				logs.Info("unix-systemv service")
-				os.Remove("/etc/rc.d/S90" + svcConfig.Name)
-				os.Remove("/etc/rc.d/K02" + svcConfig.Name)
-			}
-			return
-		}
-	} else {
-		// 这一步只会在初始化的时候右键，管理员运行，之后再也不会用了，因为后期服务注册都会直接带上了参数。走上面了。
-		// 从txt文件里读取verifyKey
-		fileName := "keyFile.txt"
-		if len(*verifyKey) == 0 {
-			_, err := os.Stat(fileName)
-			if err != nil {
-				logs.Error("文件%v不存在 %v", fileName, err)
-			}
-			if os.IsNotExist(err) {
-				file1, err1 := os.Create(fileName)
-				//写入文件
-				n, err1 := file1.WriteString(*verifyKey)
-				if err1 != nil {
-					logs.Error("文件写入失败 %s %s", fileName, err)
-				} else {
-					logs.Info("%v 文件初始化创建结果 %v", fileName, n)
-				}
-			} else {
-				fileContent, fileErr := os.ReadFile(fileName)
-				if fileErr == nil && len(fileContent) > 0 {
-					fileContentString := string(fileContent)
-					fileContentString = strings.Replace(fileContentString, "\r", "", -1)
-					fileContentString = strings.Replace(fileContentString, "\n", "", -1)
-					fileContentString = strings.TrimSpace(fileContentString)
-					*verifyKey = fileContentString
-				}
-			}
-		}
-		if len(*verifyKey) == 0 {
-			logs.Error("verifyKey不能为空,地址 %v", fileName)
-			os.Exit(0)
-		}
-
-		svcConfig.Arguments = append(svcConfig.Arguments, "-vkey="+*verifyKey)
-
-		logs.Info("初始化，没有参数，默认注册安装")
-		// 如果没有参数默认就注册
-		service.Control(s, "stop")
-		service.Control(s, "uninstall")
-		install.InstallNpc()
-		err4 := service.Control(s, "install")
-		if err4 != nil {
-			logs.Error("Valid actions: %q\n%s", service.ControlAction, err4.Error())
-		}
-		if service.Platform() == "unix-systemv" {
-			logs.Info("unix-systemv service")
-			confPath := "/etc/init.d/" + svcConfig.Name
-			os.Symlink(confPath, "/etc/rc.d/S90"+svcConfig.Name)
-			os.Symlink(confPath, "/etc/rc.d/K02"+svcConfig.Name)
 		}
 	}
 	s.Run()

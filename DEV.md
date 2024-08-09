@@ -101,6 +101,21 @@ CGO_ENABLED=0 GOOS=windows GOARCH=386  go build -ldflags="-w -s -extldflags -sta
 
 官方有arm打包的
 
+
+ubuntu 22.04下直接设置
+
+```shell
+go env -w GOARCH=arm
+go env -w  GOARM=7
+```
+
+即可。
+
+```shell
+go build -ldflags="-w -s" -o kuaima-ip ./cmd/npc/npc.go
+```
+
+
 ARMv7	supported	GOARM=7	GOARCH=arm
 
 GOARCH=arm GOARM=7 GOOS=linux go build
