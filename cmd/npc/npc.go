@@ -47,6 +47,7 @@ func main() {
 	logs.Reset()
 	logs.EnableFuncCallDepth(true)
 	logs.SetLogFuncCallDepth(3)
+	logs.SetLevel(logs.LevelCritical) // 设置日志级别为 Critical ，不需要输出日志，避免磁盘满了。
 	if *ver {
 		common.PrintVersion()
 		return
