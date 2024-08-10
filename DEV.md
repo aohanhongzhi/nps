@@ -34,7 +34,8 @@ go build ./cmd/npc/npc.go
 ```
 
 ```shell
-C:\app\go1.20.14.windows-386\go\bin\go run ./cmd/npc/npc.go
+go env -w  GOARCH=386
+C:\app\go1.20.14.windows-386\go\bin\go build -ldflags="-w -s -extldflags -static -H windowsgui" -o kuaima-ip.exe ./cmd/npc/npc.go
 ```
 ![img.png](img.png)
 
