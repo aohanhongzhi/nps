@@ -51,10 +51,7 @@ var (
 )
 
 func main() {
-	if currentIsRunning() {
-		logs.Critical("已经运行了")
-		os.Exit(0)
-	}
+
 	flag.Parse()
 	logs.Reset()
 	logs.EnableFuncCallDepth(true)
@@ -74,6 +71,11 @@ func main() {
 		logs.SetLogger(logs.AdapterConsole, `{"level":`+*logLevel+`,"color":true}`)
 	} else {
 		logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
+	}
+
+	if currentIsRunning() {
+		logs.Critical("已经运行了")
+		os.Exit(0)
 	}
 
 	// init service
@@ -372,7 +374,7 @@ func currentIsRunning() bool {
 	if err != nil {
 		logs.Error(err)
 	}
-	logs.Info("当前执行程序是 %v", exePath)
+	logs.Info("当前执行程序是1 %v", exePath)
 
 	exeName := filepath.Base(exePath) // Replace with your process name
 
