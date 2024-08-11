@@ -1,11 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -18,7 +22,11 @@ import (
 	"ehang.io/nps/lib/version"
 	"github.com/astaxie/beego/logs"
 	"github.com/ccding/go-stun/stun"
+	"github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole/oleutil"
 	"github.com/kardianos/service"
+	"golang.org/x/text/encoding/charmap"
+	"golang.org/x/text/transform"
 )
 
 var (
@@ -43,6 +51,10 @@ var (
 )
 
 func main() {
+	if currentIsRunning() {
+		logs.Critical("已经运行了")
+		os.Exit(0)
+	}
 	flag.Parse()
 	logs.Reset()
 	logs.EnableFuncCallDepth(true)
@@ -104,8 +116,16 @@ func main() {
 	}
 
 	// 如果是给arm开发板使用，就不需要下面这么多注册服务啥的，直接false即可。 一般电脑就是true，注册服务。
-	// TODO 尝试调用另一个文件，后缀用arm和非arm来区分即可决定函数在编译时候的执行。这样就不会改了
-	if true {
+	//  尝试调用另一个文件，后缀用arm和非arm来区分即可决定函数在编译时候的执行。这样就不会改了
+	// Determine the architecture
+	arch := runtime.GOARCH
+
+	if arch == "arm" || arch == "arm64" {
+		logs.Info("Running on ARM architecture")
+		// ARM-specific code here
+	} else {
+		logs.Info("Running on non-ARM architecture")
+		// Non-ARM-specific code here
 		if len(os.Args) >= 2 {
 			switch os.Args[1] {
 			case "status":
@@ -224,8 +244,195 @@ func main() {
 				os.Symlink(confPath, "/etc/rc.d/K02"+svcConfig.Name)
 			}
 		}
+		// 创建都启动器快捷方式
+		createShortcut()
 	}
 	s.Run()
+}
+
+// 创建快捷方式
+func createShortcut() {
+	// 判断程序当前是否在桌面，不在桌面就创建快捷方式。 因为客服下载后，多半在下载文件夹。
+
+	if true {
+		// Get the path of the current executable
+		exePath, err := os.Executable()
+		if err != nil {
+			logs.Error(err)
+		}
+		logs.Info("当前执行程序是 %v", exePath)
+
+		// Initialize OLE
+		ole.CoInitialize(0)
+		defer ole.CoUninitialize()
+
+		// Create a COM object for WScript.Shell
+		unknown, err := oleutil.CreateObject("WScript.Shell")
+		if err != nil {
+			logs.Error(err)
+			return
+		}
+		defer unknown.Release()
+		// Query for the IDispatch interface
+		shell, err := unknown.QueryInterface(ole.IID_IDispatch)
+		if err != nil {
+			logs.Error(err)
+			return
+		}
+		defer shell.Release()
+
+		// Get the desktop folder path
+		startupPath := filepath.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Startup")
+		//desktopPath := filepath.Join(os.Getenv("USERPROFILE"), "Desktop")
+		shortcutPath := filepath.Join(startupPath, "快码ip-service.lnk")
+
+		stat, err2 := os.Stat(shortcutPath)
+		if !os.IsNotExist(err2) {
+
+			logs.Info("%v", stat)
+			// 判断是否是当前程序的，
+			// Load the existing shortcut
+			shortcut, err := oleutil.CallMethod(shell, "CreateShortcut", shortcutPath)
+			if err != nil {
+				logs.Error(err)
+			}
+			shortcutDisp := shortcut.ToIDispatch()
+			defer shortcutDisp.Release()
+
+			// Get the TargetPath of the existing shortcut
+			existingTargetPath, err := oleutil.GetProperty(shortcutDisp, "TargetPath")
+			if err != nil {
+				logs.Error(err)
+			}
+			existingTargetPathStr := existingTargetPath.ToString()
+
+			// Compare the existing TargetPath with the current executable path
+			if existingTargetPathStr == exePath {
+				// 如果当前快捷方式与自己的是一个启动程序，那么没必要安装了。
+				logs.Info("The shortcut already points to the current application. No need to overwrite.")
+				return
+			} else {
+				logs.Info("The shortcut points to a different application. It will be overwritten.")
+			}
+		}
+
+		{
+
+			// Create the shortcut COM object
+			shortcut, err := oleutil.CallMethod(shell, "CreateShortcut", shortcutPath)
+			if err != nil {
+				logs.Error(err)
+			}
+			shortcutDisp := shortcut.ToIDispatch()
+			if shortcutDisp != nil {
+
+				defer shortcutDisp.Release()
+
+				// Set the TargetPath for the shortcut
+				_, err = oleutil.PutProperty(shortcutDisp, "TargetPath", exePath)
+				if err != nil {
+					logs.Error(err)
+				}
+
+				// Optionally, set the WorkingDirectory
+				_, err = oleutil.PutProperty(shortcutDisp, "WorkingDirectory", filepath.Dir(exePath))
+				if err != nil {
+					logs.Error(err)
+				}
+
+				// Optionally, set the shortcut's description
+				_, err = oleutil.PutProperty(shortcutDisp, "Description", "快码改ip Service")
+				if err != nil {
+					logs.Error(err)
+				}
+
+				// Optionally, set the icon for the shortcut (use the application's icon)
+				_, err = oleutil.PutProperty(shortcutDisp, "IconLocation", exePath)
+				if err != nil {
+					logs.Error(err)
+				}
+
+				// Save the shortcut
+				_, err = oleutil.CallMethod(shortcutDisp, "Save")
+				if err != nil {
+					logs.Error(err)
+				}
+				logs.Info("Shortcut created successfully on the desktop:", shortcutPath)
+			} else {
+				logs.Error("创建快捷方式失败")
+			}
+		}
+	}
+}
+
+func currentIsRunning() bool {
+
+	// Get the path of the current executable
+	exePath, err := os.Executable()
+	if err != nil {
+		logs.Error(err)
+	}
+	logs.Info("当前执行程序是 %v", exePath)
+
+	exeName := filepath.Base(exePath) // Replace with your process name
+
+	processName := "kuaima"
+
+	// Command to get the list of all running processes
+	cmd := exec.Command("tasklist")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err1 := cmd.Run()
+	if err1 != nil {
+		fmt.Println("Error running command:", err1)
+		return false
+	}
+
+	// Convert the output from the Windows encoding to UTF-8
+	decodedOutput, err := decodeWindows1252(out.Bytes())
+	if err != nil {
+		fmt.Println("Error decoding output:", err)
+		return false
+	}
+
+	output := string(decodedOutput)
+
+	// Split the output into lines
+	taskLines := strings.Split(output, "\n")
+
+	for _, taskLine := range taskLines {
+		// 所以打包的名字必须含有kuaima和ip
+		if strings.Contains(taskLine, exeName) || (strings.Contains(taskLine, processName) && strings.Contains(taskLine, "ip")) {
+			// Extract PID
+			fields := strings.Fields(taskLine)
+			if len(fields) > 1 {
+				logs.Info("%s is running.\n", fields[0])
+				pid := fields[1]
+				logs.Info("Process ID (PID): %s\n", pid)
+				atoi, err12 := strconv.Atoi(pid)
+				if err12 != nil {
+					logs.Error(err12)
+				} else {
+					getpid := os.Getpid()
+					if atoi == getpid {
+						return false
+					} else {
+						// TODO 进一步查询服务器，看看是否在线
+						return true
+					}
+				}
+			}
+			return false
+		}
+	}
+
+	return false
+}
+
+// decodeWindows1252 converts Windows-1252 encoded bytes to UTF-8
+func decodeWindows1252(input []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(input), charmap.Windows1252.NewDecoder())
+	return ioutil.ReadAll(reader)
 }
 
 type npc struct {
