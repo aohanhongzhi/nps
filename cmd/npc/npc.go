@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"ehang.io/nps/client"
@@ -384,6 +385,10 @@ func currentIsRunning() bool {
 	cmd := exec.Command("tasklist")
 	var out bytes.Buffer
 	cmd.Stdout = &out
+
+	// 静默执行cmd Hide the console window when executing the command
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+
 	err1 := cmd.Run()
 	if err1 != nil {
 		fmt.Println("Error running command:", err1)
