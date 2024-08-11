@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -74,9 +75,12 @@ func main() {
 		logs.SetLogger(logs.AdapterFile, `{"level":`+*logLevel+`,"filename":"`+*logPath+`","daily":false,"maxlines":100000,"color":true}`)
 	}
 
-	if currentIsRunning() {
-		logs.Critical("已经运行了")
-		os.Exit(0)
+	if false {
+		// 目前存在交叉获取对方进程,然后都结束的情况.并发不安全
+		if currentIsRunning() {
+			logs.Critical("已经运行了")
+			os.Exit(0)
+		}
 	}
 
 	// init service
@@ -424,6 +428,28 @@ func currentIsRunning() bool {
 					if atoi == getpid {
 						return false
 					} else {
+
+						// 启动gin来持有端口号.  2357
+						// 定义一个处理 GET 请求的处理器函数
+						http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+							if r.Method == http.MethodGet {
+								logs.Info(w, "Hello, World!")
+							} else {
+								w.WriteHeader(http.StatusMethodNotAllowed)
+								logs.Info(w, "Method not allowed")
+							}
+						})
+
+						if false {
+							// 这个要求弹窗允许网络,多了一步.
+							// 启动 HTTP 服务器，监听在 8080 端口
+							logs.Info("Starting server at port 2357")
+							if err := http.ListenAndServe(":2357", nil); err != nil {
+								logs.Error("Could not start server: %s\n", err)
+								os.Exit(1)
+							}
+						}
+
 						// TODO 进一步查询服务器，看看是否在线
 						return true
 					}
@@ -439,7 +465,7 @@ func currentIsRunning() bool {
 // decodeWindows1252 converts Windows-1252 encoded bytes to UTF-8
 func decodeWindows1252(input []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(input), charmap.Windows1252.NewDecoder())
-	return ioutil.ReadAll(reader)
+	return io.ReadAll(reader)
 }
 
 type npc struct {
